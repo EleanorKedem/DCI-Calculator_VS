@@ -5,14 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace DCI_Calculator
 {
     public partial class Login : Form
     {
+        MySqlConnection loginConn;
+        string connString;
+
         public Login()
         {
             InitializeComponent();
@@ -20,40 +24,110 @@ namespace DCI_Calculator
             UserIDTextBox.Focus();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void OKbutton_Click(object sender, EventArgs e)
         {
-            /* TODO - fix connection with database - Credentials-temp
-             * later link to a proper database of credentials
-            SqlConnection loginConn = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Eleanor\\source\\repos\\DCI Calculator\\DCI Calculator\\Credentials - temp.mdf;Integrated Security=True;User Instance=true");
+            connString = "SERVER = 109.203.118.107; PORT = 3306; DATABASE = eleanor_credentials; UID = eleanor_eleanor; PASSWORD = SfZGV@UCxVx-;";
 
-            SqlCommand loginCmd = new SqlCommand("Select * from Credentials where UserName = '" + UserIDTextBox.Text + "' and Password = '" + PasswordTextBox.Text + "'", loginConn);
-            
-            SqlDataAdapter loginData = new SqlDataAdapter(loginCmd);
-
-            DataTable loginTable = new DataTable();
-            loginData.Fill(loginTable);
-
-            if (loginTable.Rows.Count>0)
-            {*/
-                this.Hide();
-                Menu mainMenu = new Menu();
-                mainMenu.Show();
-            /*}
-
-            else
+            try
             {
-                MessageBox.Show("Wrong User ID or Password.");
-            }*/
+                //TODO add using when creating the new connection in order to verify the connection closes
+                loginConn = new MySqlConnection();
+                loginConn.ConnectionString = connString;
+                loginConn.Open();
+
+                string password = EncryptPassword(PasswordTextBox.Text);
+
+                //TODO use the encrypted passwords after changing the credentials database to md5
+                string query = "Select * from _credentials WHERE User_Name = '" + UserIDTextBox.Text + "' and Password = '" + PasswordTextBox.Text + "'";
+                MySqlCommand loginCmd = new MySqlCommand(query, loginConn);
+
+                MySqlDataAdapter loginData = new MySqlDataAdapter(loginCmd);
+
+                DataTable loginTable = new DataTable();
+                loginData.Fill(loginTable);
+
+                bool expired = true;
+
+                if (loginTable.Rows.Count > 0)
+                {
+                    foreach(DataRow row in loginTable.Rows)
+                    {
+                        DateTime expDate = row.Field<DateTime>("Expiration");
+                        if(expDate > DateTime.Now)
+                        {
+                            expired = false;
+                            this.Hide();
+                            Menu mainMenu = new Menu();
+                            mainMenu.Show();
+                        }
+                    }
+
+                    if (expired)
+                    {
+                        errorMessageLabel.Text = "Your License Expired. Please Contact DCI for Renewal.";
+                    }
+                }
+
+                else
+                {
+                    errorMessageLabel.Text = "Wrong User ID or Password";
+                }
+                loginConn.Close();
+            }
+
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
 
         private void Login_Load(object sender, EventArgs e)
         {
  
+        }
+
+        private string EncryptPassword(string password)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                // Convert the input string to a byte array and compute the hash.
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                // Create a new Stringbuilder to collect the bytes
+                // and create a string.
+                StringBuilder sBuilder = new StringBuilder();
+
+                // Loop through each byte of the hashed data 
+                // and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                // Return the hexadecimal string.
+                return sBuilder.ToString();
+            }
+        }
+
+        private bool VerifyMd5Hash(string input, string hash)
+        {
+            // Create a StringComparer an compare the hashes.
+            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+            if (0 == comparer.Compare(input, hash))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void UserIDTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -68,7 +142,7 @@ namespace DCI_Calculator
         {
             if(e.KeyCode == Keys.Enter)
             {
-                button1.PerformClick();
+                OKbutton.PerformClick();
             }
         }
     }

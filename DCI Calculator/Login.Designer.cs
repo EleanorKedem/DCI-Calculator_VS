@@ -28,67 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.OKbutton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.UserIDTextBox = new System.Windows.Forms.TextBox();
-            this.credentialsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this._Credentials_tempDataSet = new DCI_Calculator._Credentials_tempDataSet();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.credentialsTableAdapter = new DCI_Calculator._Credentials_tempDataSetTableAdapters.CredentialsTableAdapter();
-            ((System.ComponentModel.ISupportInitialize)(this.credentialsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Credentials_tempDataSet)).BeginInit();
+            this.errorMessageLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // OKbutton
             // 
-            this.button1.Location = new System.Drawing.Point(311, 202);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.OKbutton.Location = new System.Drawing.Point(311, 202);
+            this.OKbutton.Name = "OKbutton";
+            this.OKbutton.Size = new System.Drawing.Size(75, 23);
+            this.OKbutton.TabIndex = 0;
+            this.OKbutton.Text = "OK";
+            this.OKbutton.UseVisualStyleBackColor = true;
+            this.OKbutton.Click += new System.EventHandler(this.OKbutton_Click);
             // 
-            // button2
+            // cancelButton
             // 
-            this.button2.Location = new System.Drawing.Point(432, 202);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.cancelButton.Location = new System.Drawing.Point(432, 202);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 1;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // UserIDTextBox
             // 
-            this.UserIDTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.credentialsBindingSource, "UserName", true));
+            this.UserIDTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UserIDTextBox.Location = new System.Drawing.Point(311, 91);
             this.UserIDTextBox.Name = "UserIDTextBox";
-            this.UserIDTextBox.Size = new System.Drawing.Size(196, 20);
+            this.UserIDTextBox.Size = new System.Drawing.Size(196, 21);
             this.UserIDTextBox.TabIndex = 2;
             this.UserIDTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UserIDTextBox_KeyDown);
             // 
-            // credentialsBindingSource
-            // 
-            this.credentialsBindingSource.DataMember = "Credentials";
-            this.credentialsBindingSource.DataSource = this._Credentials_tempDataSet;
-            // 
-            // _Credentials_tempDataSet
-            // 
-            this._Credentials_tempDataSet.DataSetName = "_Credentials_tempDataSet";
-            this._Credentials_tempDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // PasswordTextBox
             // 
-            this.PasswordTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.credentialsBindingSource, "Password", true));
+            this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PasswordTextBox.Location = new System.Drawing.Point(311, 134);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.PasswordChar = '*';
-            this.PasswordTextBox.Size = new System.Drawing.Size(196, 20);
+            this.PasswordTextBox.Size = new System.Drawing.Size(196, 21);
             this.PasswordTextBox.TabIndex = 3;
             this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
             // 
@@ -114,9 +99,15 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Password";
             // 
-            // credentialsTableAdapter
+            // errorMessageLabel
             // 
-            this.credentialsTableAdapter.ClearBeforeFill = true;
+            this.errorMessageLabel.AutoSize = true;
+            this.errorMessageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.errorMessageLabel.ForeColor = System.Drawing.Color.Red;
+            this.errorMessageLabel.Location = new System.Drawing.Point(262, 44);
+            this.errorMessageLabel.Name = "errorMessageLabel";
+            this.errorMessageLabel.Size = new System.Drawing.Size(0, 16);
+            this.errorMessageLabel.TabIndex = 6;
             // 
             // Login
             // 
@@ -124,18 +115,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.errorMessageLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.UserIDTextBox);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.OKbutton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Login";
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Login_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.credentialsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Credentials_tempDataSet)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,14 +133,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button OKbutton;
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.TextBox UserIDTextBox;
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private _Credentials_tempDataSet _Credentials_tempDataSet;
-        private System.Windows.Forms.BindingSource credentialsBindingSource;
-        private _Credentials_tempDataSetTableAdapters.CredentialsTableAdapter credentialsTableAdapter;
+        private System.Windows.Forms.Label errorMessageLabel;
     }
 }

@@ -40,8 +40,6 @@
             this.mineComboBox = new System.Windows.Forms.ComboBox();
             this.countryComboBox = new System.Windows.Forms.ComboBox();
             this.OKbutton = new System.Windows.Forms.Button();
-            this.stonesLabel = new System.Windows.Forms.Label();
-            this.stonesComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mineLabel
@@ -152,52 +150,12 @@
             this.OKbutton.UseVisualStyleBackColor = false;
             this.OKbutton.Click += new System.EventHandler(this.OKbutton_Click);
             // 
-            // stonesLabel
-            // 
-            this.stonesLabel.AutoSize = true;
-            this.stonesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stonesLabel.Location = new System.Drawing.Point(155, 245);
-            this.stonesLabel.Name = "stonesLabel";
-            this.stonesLabel.Size = new System.Drawing.Size(56, 16);
-            this.stonesLabel.TabIndex = 11;
-            this.stonesLabel.Text = "Stones";
-            // 
-            // stonesComboBox
-            // 
-            this.stonesComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stonesComboBox.FormattingEnabled = true;
-            this.stonesComboBox.Items.AddRange(new object[] {
-            "Specials",
-            "10CT",
-            "9CT",
-            "8CT",
-            "7CT",
-            "6CT",
-            "5CT",
-            "4CT",
-            "3CT",
-            "10GR",
-            "8GR",
-            "6GR",
-            "4GR",
-            "3GR",
-            "2PCT",
-            "4PCT",
-            "-9 +7",
-            "-7 +5"});
-            this.stonesComboBox.Location = new System.Drawing.Point(295, 245);
-            this.stonesComboBox.Name = "stonesComboBox";
-            this.stonesComboBox.Size = new System.Drawing.Size(237, 24);
-            this.stonesComboBox.TabIndex = 12;
-            // 
             // ParcelCalc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.stonesComboBox);
-            this.Controls.Add(this.stonesLabel);
             this.Controls.Add(this.OKbutton);
             this.Controls.Add(this.countryComboBox);
             this.Controls.Add(this.mineComboBox);
@@ -231,7 +189,5 @@
         private System.Windows.Forms.ComboBox mineComboBox;
         private System.Windows.Forms.ComboBox countryComboBox;
         private System.Windows.Forms.Button OKbutton;
-        private System.Windows.Forms.Label stonesLabel;
-        private System.Windows.Forms.ComboBox stonesComboBox;
     }
 }

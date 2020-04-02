@@ -10,13 +10,12 @@ using System.Windows.Forms;
 
 namespace DCI_Calculator
 {
-    public partial class ItemCalc : Form
+    public partial class SmallItemCalc : Form
     {
         bool showPriceList;
         SizeAssortment stonesSize;
 
-        public String stoneSizeValue;
-        public ItemCalc(SizeAssortment s)
+        public SmallItemCalc(SizeAssortment s)
         {
             showPriceList = false;
             stonesSize = s;
@@ -28,12 +27,18 @@ namespace DCI_Calculator
             PriceListHide();
         }
 
+        private void SmallItemCalc_Load(object sender, EventArgs e)
+        {
+
+        }
+
         #region PriceList
+
         private void priceListButton_Click(object sender, EventArgs e)
         {
             showPriceList = !showPriceList;
 
-            if (showPriceList)
+            if(showPriceList)
             {
                 PriceListShow();
             }
@@ -45,46 +50,46 @@ namespace DCI_Calculator
 
         private void PriceListShow()
         {
-            crystalsGroupBox.Size = new Size(1242, 178);
+            crystalsGroupBox.Size = new Size(1030, 178);
             crystalsTableLayoutPanelPrices.Show();
-            sawableHighGroupBox.Size = new Size(1242, 178);
+            sawableHighGroupBox.Size = new Size(1030, 178);
             sawableHighTableLayoutPanelPrices.Show();
-            sawableLowGroupBox.Size = new Size(1242, 178);
+            sawableLowGroupBox.Size = new Size(1030, 178);
             sawableLowTableLayoutPanelPrices.Show();
-            makeableHighGroupBox.Size = new Size(1242, 178);
+            makeableHighGroupBox.Size = new Size(1030, 178);
             makeableHighTableLayoutPanelPrices.Show();
-            makeableLowGroupBox.Size = new Size(1242, 178);
+            makeableLowGroupBox.Size = new Size(1030, 178);
             makeableLowTableLayoutPanelPrices.Show();
-            spottedZGroupBox.Size = new Size(1242, 178);
-            spottedTableLayoutPanelPrices.Show();
-            clivageGroupBox.Size = new Size(1242, 178);
+            spottedZGroupBox.Size = new Size(1030, 178);
+            spottedZTableLayoutPanelPrices.Show();
+            clivageGroupBox.Size = new Size(1030, 178);
             clivageTableLayoutPanelPrices.Show();
-            rejectionsGroupBox.Size = new Size(1242, 178);
+            rejectionsGroupBox.Size = new Size(1030, 178);
             rejectionsTableLayoutPanelPrices.Show();
-            boartGroupBox.Size = new Size(1242, 178);
+            boartGroupBox.Size = new Size(1030, 178);
             boartTableLayoutPanelPrices.Show();
         }
 
         private void PriceListHide()
         {
             crystalsTableLayoutPanelPrices.Hide();
-            crystalsGroupBox.Size = new Size(740, 178);
+            crystalsGroupBox.Size = new Size(630,178);
             sawableHighTableLayoutPanelPrices.Hide();
-            sawableHighGroupBox.Size = new Size(740, 178);
+            sawableHighGroupBox.Size = new Size(630, 178);
             sawableLowTableLayoutPanelPrices.Hide();
-            sawableLowGroupBox.Size = new Size(740, 178);
+            sawableLowGroupBox.Size = new Size(630, 178);
             makeableHighTableLayoutPanelPrices.Hide();
-            makeableHighGroupBox.Size = new Size(740, 178);
+            makeableHighGroupBox.Size = new Size(630, 178);
             makeableLowTableLayoutPanelPrices.Hide();
-            makeableLowGroupBox.Size = new Size(740, 178);
-            spottedTableLayoutPanelPrices.Hide();
-            spottedZGroupBox.Size = new Size(740, 178);
+            makeableLowGroupBox.Size = new Size(630, 178);
+            spottedZTableLayoutPanelPrices.Hide();
+            spottedZGroupBox.Size = new Size(630, 178);
             clivageTableLayoutPanelPrices.Hide();
-            clivageGroupBox.Size = new Size(740, 178);
+            clivageGroupBox.Size = new Size(630, 178);
             rejectionsTableLayoutPanelPrices.Hide();
-            rejectionsGroupBox.Size = new Size(740, 178);
+            rejectionsGroupBox.Size = new Size(630, 178);
             boartTableLayoutPanelPrices.Hide();
-            boartGroupBox.Size = new Size(740, 178);
+            boartGroupBox.Size = new Size(630, 178);
         }
 
         #endregion
@@ -101,7 +106,7 @@ namespace DCI_Calculator
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            int row, col, position;
+           int row, col, position;
             double price = 0;
             int stonesNum = 0;
             var textbox = (TextBox)sender;
@@ -123,7 +128,7 @@ namespace DCI_Calculator
 
             //TODO check prices table was found!
             var priceTextbox = (TextBox)pricesTable.GetControlFromPosition(col, row);
-            
+
             if (priceTextbox.Text != "")
             {
                 price = Convert.ToDouble(priceTextbox.Text);
@@ -206,11 +211,10 @@ namespace DCI_Calculator
                     var nextTextbox = table.GetControlFromPosition(col - 1, row);
                     nextTextbox.Focus();
                 }
-            }        
+            }
         }
 
-
-        private void ItemCalcTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void SmallItemCalcTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
@@ -225,7 +229,7 @@ namespace DCI_Calculator
                     nextTextbox.Focus();
                 }
             }
-            
+
             else
             {
                 AllowOnlyNumbers(e);
@@ -237,17 +241,6 @@ namespace DCI_Calculator
         {
             if (e.KeyChar == 13)
             {
-                /* TODO - this is not working! Not sure why
-                var textbox = (TextBox)sender;
-                var table = (TableLayoutPanel)textbox.Parent;
-                var groupBox = (GroupBox)table.Parent;
-                var nextGroupBox = this.GetNextControl(groupBox, true);
-                name = nextGroupBox.Tag.ToString() + "Table";
-                var nextTable = (TableLayoutPanel)nextGroupBox.Controls[name];
-                var nextTextbox = nextTable.GetControlFromPosition(1, 1); //position of the carat count textbox
-                nextTextbox.Focus();
-                */
-
                 e.Handled = true;
                 sawableHighCaratCountValueTextbox.Focus();
             }
@@ -261,6 +254,7 @@ namespace DCI_Calculator
                 sawableLowCaratCountValueTextbox.Focus();
             }
         }
+
         private void SawableLowCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -269,6 +263,7 @@ namespace DCI_Calculator
                 makeableHighCaratCountValueTextbox.Focus();
             }
         }
+
         private void MakeableHighCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -277,6 +272,7 @@ namespace DCI_Calculator
                 makeableLowCaratCountValueTextbox.Focus();
             }
         }
+
         private void MakeableLowCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -285,6 +281,7 @@ namespace DCI_Calculator
                 spottedZCaratCountValueTextbox.Focus();
             }
         }
+
         private void SpottedZCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -293,14 +290,16 @@ namespace DCI_Calculator
                 clivageCaratCountValueTextbox.Focus();
             }
         }
+
         private void ClivageCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
                 e.Handled = true;
-                rejectsCaratCountValueTextbox.Focus();
+                rejectionsCaratCountValueTextbox.Focus();
             }
         }
+
         private void RejectionsCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -309,6 +308,7 @@ namespace DCI_Calculator
                 boartCaratCountValueTextbox.Focus();
             }
         }
+
         private void BoartCaratCountTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)

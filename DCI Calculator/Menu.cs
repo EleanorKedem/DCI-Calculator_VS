@@ -24,7 +24,6 @@ namespace DCI_Calculator
 
         private void parcelCalc_Click(object sender, EventArgs e)
         {
-            this.Hide();
             //TODO add instance of class parcel
             //Need to discuss with Luke
             ParcelCalc prcl = new ParcelCalc();
@@ -83,7 +82,6 @@ namespace DCI_Calculator
 
         private void about_Click(object sender, EventArgs e)
         {
-            this.Hide();
             About aboutInfo = new About();
             aboutInfo.Show();
         }
