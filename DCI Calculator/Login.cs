@@ -31,7 +31,7 @@ namespace DCI_Calculator
 
         private void OKbutton_Click(object sender, EventArgs e)
         {
-            connString = "SERVER = 109.203.118.107; PORT = 3306; DATABASE = eleanor_credentials; UID = eleanor_eleanor; PASSWORD = SfZGV@UCxVx-;";
+            connString = "SERVER = 109.203.118.107; PORT = 3306; DATABASE = eleanor_DCI; UID = eleanor_eleanor; PASSWORD = SfZGV@UCxVx-;";
 
             try
             {
@@ -42,8 +42,7 @@ namespace DCI_Calculator
 
                 string password = EncryptPassword(PasswordTextBox.Text);
 
-                //TODO use the encrypted passwords after changing the credentials database to md5
-                string query = "Select * from _credentials WHERE User_Name = '" + UserIDTextBox.Text + "' and Password = '" + PasswordTextBox.Text + "'";
+                string query = "Select * from _credentials WHERE User_Name = '" + UserIDTextBox.Text + "' and mdpass = '" + password + "'";
                 MySqlCommand loginCmd = new MySqlCommand(query, loginConn);
 
                 MySqlDataAdapter loginData = new MySqlDataAdapter(loginCmd);

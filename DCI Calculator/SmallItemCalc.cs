@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace DCI_Calculator
 {
     public partial class SmallItemCalc : Form
     {
+        MySqlConnection priceBookConn;
+        string connString;
+
         bool showPriceList;
         SizeAssortment stonesSize;
 
@@ -23,6 +27,7 @@ namespace DCI_Calculator
             this.stonesLabel.Text = stonesSize.Key.ToString() + " Valuation    " + ParcelCalc.SetValueMine;
             this.totalCtsValueLabel.Text = stonesSize.TotalWeight.ToString();
             this.diffSumValueLabel.Text = stonesSize.CheckEnteredWeight().ToString();
+            this.LoadDataBase();
             this.Show();
             PriceListHide();
         }
@@ -51,45 +56,106 @@ namespace DCI_Calculator
         private void PriceListShow()
         {
             crystalsGroupBox.Size = new Size(1030, 178);
-            crystalsTableLayoutPanelPrices.Show();
+            CrystalsTableLayoutPanelPrices.Show();
             sawableHighGroupBox.Size = new Size(1030, 178);
-            sawableHighTableLayoutPanelPrices.Show();
+            SawableHighTableLayoutPanelPrices.Show();
             sawableLowGroupBox.Size = new Size(1030, 178);
-            sawableLowTableLayoutPanelPrices.Show();
+            SawableLowTableLayoutPanelPrices.Show();
             makeableHighGroupBox.Size = new Size(1030, 178);
-            makeableHighTableLayoutPanelPrices.Show();
+            MakeableHighTableLayoutPanelPrices.Show();
             makeableLowGroupBox.Size = new Size(1030, 178);
-            makeableLowTableLayoutPanelPrices.Show();
+            MakeableLowTableLayoutPanelPrices.Show();
             spottedZGroupBox.Size = new Size(1030, 178);
-            spottedZTableLayoutPanelPrices.Show();
+            SpottedZTableLayoutPanelPrices.Show();
             clivageGroupBox.Size = new Size(1030, 178);
-            clivageTableLayoutPanelPrices.Show();
+            ClivageTableLayoutPanelPrices.Show();
             rejectionsGroupBox.Size = new Size(1030, 178);
-            rejectionsTableLayoutPanelPrices.Show();
+            RejectionsTableLayoutPanelPrices.Show();
             boartGroupBox.Size = new Size(1030, 178);
-            boartTableLayoutPanelPrices.Show();
+            BoartTableLayoutPanelPrices.Show();
         }
 
         private void PriceListHide()
         {
-            crystalsTableLayoutPanelPrices.Hide();
+            CrystalsTableLayoutPanelPrices.Hide();
             crystalsGroupBox.Size = new Size(630,178);
-            sawableHighTableLayoutPanelPrices.Hide();
+            SawableHighTableLayoutPanelPrices.Hide();
             sawableHighGroupBox.Size = new Size(630, 178);
-            sawableLowTableLayoutPanelPrices.Hide();
+            SawableLowTableLayoutPanelPrices.Hide();
             sawableLowGroupBox.Size = new Size(630, 178);
-            makeableHighTableLayoutPanelPrices.Hide();
+            MakeableHighTableLayoutPanelPrices.Hide();
             makeableHighGroupBox.Size = new Size(630, 178);
-            makeableLowTableLayoutPanelPrices.Hide();
+            MakeableLowTableLayoutPanelPrices.Hide();
             makeableLowGroupBox.Size = new Size(630, 178);
-            spottedZTableLayoutPanelPrices.Hide();
+            SpottedZTableLayoutPanelPrices.Hide();
             spottedZGroupBox.Size = new Size(630, 178);
-            clivageTableLayoutPanelPrices.Hide();
+            ClivageTableLayoutPanelPrices.Hide();
             clivageGroupBox.Size = new Size(630, 178);
-            rejectionsTableLayoutPanelPrices.Hide();
+            RejectionsTableLayoutPanelPrices.Hide();
             rejectionsGroupBox.Size = new Size(630, 178);
-            boartTableLayoutPanelPrices.Hide();
+            BoartTableLayoutPanelPrices.Hide();
             boartGroupBox.Size = new Size(630, 178);
+        }
+        private void LoadDataBase()
+        {
+            connString = "SERVER = 109.203.118.107; PORT = 3306; DATABASE = eleanor_DCI; UID = eleanor_eleanor; PASSWORD = SfZGV@UCxVx-;";
+
+            try
+            {
+                //TODO add using when creating the new connection in order to verify the connection closes
+                priceBookConn = new MySqlConnection();
+                priceBookConn.ConnectionString = connString;
+                priceBookConn.Open();
+
+                foreach (var g in this.Controls.OfType<GroupBox>())
+                {
+                    String name = g.Tag + "TableLayoutPanelPrices";
+                    var pricesTable = (TableLayoutPanel)g.Controls[name];
+                    DataTable priceBookTable = new DataTable();
+                    string query;
+
+                    switch (g.Tag)
+                    {
+                        case "Crystals":
+                        case "SawableHigh":
+                        case "SawableLow":
+                        case "MakeableHigh":
+                        case "MakeableLow":
+                            query = "Select D, E_G, H_I, J_K, cape from _smallItemCalc WHERE size = '" + stonesSize.Key.ToString() + "' and model = '" + g.Tag + "'";
+                            break;
+                        case "SpottedZ":
+                        case "Clivage":
+                            query = "Select 1CR, 2CR, 3CR, cape from _smallItemCalc WHERE size = '" + stonesSize.Key.ToString() + "' and model = '" + g.Tag + "'";
+                            break;
+                        case "Rejections":
+                            query = "Select Rejection from _smallItemCalc WHERE size = '" + stonesSize.Key.ToString() + "' and model = '" + g.Tag + "'";
+                            break;
+                        case "Boart":
+                            query = "Select Boart from _smallItemCalc WHERE size = '" + stonesSize.Key.ToString() + "' and model = '" + g.Tag + "'";
+                            break;
+                        default:
+                            query = "";
+                            break;
+                    }
+                    MySqlCommand priceBookCmd = new MySqlCommand(query, priceBookConn);
+                    MySqlDataAdapter priceBookData = new MySqlDataAdapter(priceBookCmd);
+                    priceBookData.Fill(priceBookTable);
+                    for (int row = 1; row < pricesTable.RowCount; ++row)
+                    {
+                        for (int col = 1; col < pricesTable.ColumnCount; ++col)
+                        {
+                            TextBox price = (TextBox)pricesTable.GetControlFromPosition(col, row);
+                            price.Text = priceBookTable.Rows[row - 1][col - 1].ToString();
+                        }
+                    }
+                }
+            }
+
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            priceBookConn.Close();
         }
 
         #endregion

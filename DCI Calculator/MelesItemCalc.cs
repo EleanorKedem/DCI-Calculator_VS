@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace DCI_Calculator
 {
     public partial class MelesItemCalc : Form
     {
+        MySqlConnection priceBookConn;
+        string connString;
+
         bool showPriceList;
         SizeAssortment stonesSize;
 
@@ -24,6 +28,7 @@ namespace DCI_Calculator
             this.stonesLabel.Text = stonesSize.Key.ToString() + " Valuation    " + ParcelCalc.SetValueMine;
             this.totalCtsValueLabel.Text = stonesSize.TotalWeight.ToString();
             this.diffSumValueLabel.Text = stonesSize.CheckEnteredWeight().ToString();
+            this.LoadDataBase();
             this.Show();
             PriceListHide();
         }
@@ -31,6 +36,45 @@ namespace DCI_Calculator
         private void MelesItemCalc_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void LoadDataBase()
+        {
+            connString = "SERVER = 109.203.118.107; PORT = 3306; DATABASE = eleanor_DCI; UID = eleanor_eleanor; PASSWORD = SfZGV@UCxVx-;";
+
+            try
+            {
+                //TODO add using when creating the new connection in order to verify the connection closes
+                priceBookConn = new MySqlConnection();
+                priceBookConn.ConnectionString = connString;
+                priceBookConn.Open();
+
+                foreach(var g in this.Controls.OfType<GroupBox>())
+                {
+                    string query = "Select * from _melesItemCalc WHERE size = '" + stonesSize.Key.ToString() + "' and model = '" + g.Tag + "'";               
+                    MySqlCommand priceBookCmd = new MySqlCommand(query, priceBookConn);
+                    MySqlDataAdapter priceBookData = new MySqlDataAdapter(priceBookCmd);
+                    DataTable priceBookTable = new DataTable();
+                    priceBookData.Fill(priceBookTable);
+                    String name = g.Tag + "TableLayoutPanelPrices";
+                    var pricesTable = (TableLayoutPanel)g.Controls[name];
+                    
+                    for (int row = 1; row < pricesTable.RowCount; ++row)
+                    {
+                        for (int col = 1; col < pricesTable.ColumnCount; ++col)
+                        {
+                            TextBox price = (TextBox)pricesTable.GetControlFromPosition(col, row);
+                            price.Text = priceBookTable.Rows[row-1].Field<decimal>("price").ToString();
+                        }
+                    }
+                }
+            }
+
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            priceBookConn.Close();
         }
 
         #region PriceList
@@ -55,15 +99,15 @@ namespace DCI_Calculator
             ZLowGroupBox.Size = new Size(759, 178);
             ZLowTableLayoutPanelPrices.Show();
             MakeableGroupBox.Size = new Size(759, 178);
-            makeableTableLayoutPanelPrices.Show();
+            MakeableTableLayoutPanelPrices.Show();
             SpottedGroupBox.Size = new Size(759, 178);
-            spottedTableLayoutPanelPrices.Show();
+            SpottedTableLayoutPanelPrices.Show();
             ClivageGroupBox.Size = new Size(759, 178);
-            clivageTableLayoutPanelPrices.Show();
+            ClivageTableLayoutPanelPrices.Show();
             RejectionsGroupBox.Size = new Size(759, 178);
-            rejectionsTableLayoutPanelPrices.Show();
+            RejectionsTableLayoutPanelPrices.Show();
             BoartGroupBox.Size = new Size(759, 178);
-            boartTableLayoutPanelPrices.Show();
+            BoartTableLayoutPanelPrices.Show();
         }
 
         private void PriceListHide()
@@ -72,15 +116,15 @@ namespace DCI_Calculator
             ZHighGroupBox.Size = new Size(500, 178);
             ZLowTableLayoutPanelPrices.Hide();
             ZLowGroupBox.Size = new Size(500, 178);
-            makeableTableLayoutPanelPrices.Hide();
+            MakeableTableLayoutPanelPrices.Hide();
             MakeableGroupBox.Size = new Size(500, 178);
-            spottedTableLayoutPanelPrices.Hide();
+            SpottedTableLayoutPanelPrices.Hide();
             SpottedGroupBox.Size = new Size(500, 178);
-            clivageTableLayoutPanelPrices.Hide();
+            ClivageTableLayoutPanelPrices.Hide();
             ClivageGroupBox.Size = new Size(500, 178);
-            rejectionsTableLayoutPanelPrices.Hide();
+            RejectionsTableLayoutPanelPrices.Hide();
             RejectionsGroupBox.Size = new Size(500, 178);
-            boartTableLayoutPanelPrices.Hide();
+            BoartTableLayoutPanelPrices.Hide();
             BoartGroupBox.Size = new Size(500, 178);
         }
 
